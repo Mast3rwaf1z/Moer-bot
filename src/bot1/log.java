@@ -38,7 +38,6 @@ public class log {
     	try(FileReader reader = new FileReader(file))
     	{
     		JSONObject data = (JSONObject) jsonParser.parse(reader);
-    		System.out.println(data);
     		return data;
     	}
     	catch(FileNotFoundException e)

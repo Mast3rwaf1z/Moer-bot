@@ -1,5 +1,6 @@
 package bot1;
 
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 //import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 
 import org.json.simple.JSONObject;
-
+import org.python.util.PythonInterpreter;
 
 import bot1.MusicPlayer.MusicBot;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -35,116 +36,103 @@ public class Commands extends ListenerAdapter{
     public static boolean nitten = false;
     public static boolean trackTracker = false;
     public static boolean rainbow = false;
-    public static boolean reacter = false;
+    public static boolean jens = false;
+    public static boolean rasmus = false;
     private static final String prefix = "-";
     public static long rainbowGuild = 761730703762128992L;
     public static long rainbowMember = 214752462769356802L;
     static JSONObject admin = (JSONObject) log.readData("data2.json").get("admin");
+    final private String[] color = {"blue", "green", "gray", "yellow", "orange", "red", "white", "purple", "pink", "darkgreen"};
     JSONObject data = log.readData("data2.json");
+    MusicBot musicBot = new MusicBot();
 	@SuppressWarnings("unchecked")
 	@Override
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
-        MessageChannel channel = event.getChannel();
+        TextChannel channel = event.getTextChannel();
         String msg = message.getContentDisplay();
-        String[] splitmsg = msg.split(" ", findStringSubstrings(msg, ' ') + 1);
+        String[] content = msg.split(" ");
         Member member = event.getMember();
         Guild guild = event.getGuild();
-        TextChannel testChannel = guild.getTextChannelsByName("botspam", true).get(0);
         MusicBot musicBot = new MusicBot();
     	JSONObject LB = log.readData("leaderboard2.json");
-    	
 
         // command kode
         if (event.isFromType(ChannelType.TEXT)) {
-        	
-            if (channel == testChannel) {
-                // få farver
-            	switch(msg.toLowerCase()) {
-            		case prefix + "farve " + "blå":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("blå", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "grøn":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("grøn", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "grå":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("grå", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "gul":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("gul", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "orange":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("orange", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "rød":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("rød", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "hvid":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("hvid", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "lilla":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("lilla", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "pink":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("pink", true).get(0)).queue();
-            			break;
-            		case prefix + "farve " + "mørkegrøn":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			guild.addRoleToMember(member, guild.getRolesByName("mørkegrøn", true).get(0)).queue();
-            			break;
-            	}
-
-                // fjern alle farver
-                if (msg.equalsIgnoreCase(prefix + "farve " + "reset")) {
-                    message.addReaction("\uD83D\uDC4C").queue();
-                    if (findRole(member, "blå") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("blå", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Grøn") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("grøn", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Grå") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("grå", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Gul") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("gul", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Orange") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("orange", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Rød") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("rød", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Hvid") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("hvid", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Lilla") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("lilla", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Pink") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("pink", true).get(0)).queue();
-                    }
-                    if (findRole(member, "Mørkegrøn") != null) {
-                        guild.removeRoleFromMember(member, guild.getRolesByName("mørkegrøn", true).get(0)).queue();
-                    }
-                }
-            }
-
             // flair
             EmbedBuilder embed = new EmbedBuilder();
-            switch(msg.toLowerCase()) {
-            	case prefix + "er gaust mør?":
+            switch(content[0].toLowerCase()) {
+            	case prefix + "color":
+            		if(content.length == 1) {
+            			channel.sendMessage("Get color based on input").queue();
+            		}
+            		else if(content[1].equals("reset")) {
+            			resetcolors(member, guild);
+            		}
+            		else {
+            			for(String color : color) {
+            				if(content[1].equalsIgnoreCase(color)) {
+            					resetcolors(member, guild);
+            					guild.addRoleToMember(member, guild.getRolesByName(color, true).get(0)).queue();
+            				}
+            			}
+            		}
+            		break;
+            	case prefix + "f":
+            	case prefix + "fluff":
+            		if(msg.contains("er gaust mør?")) {
                     message.addReaction("\uD83D\uDC4C").queue();
             		channel.sendMessage("Gaust er mør.").queue();
+            		break;
+            		}
+            		else if(msg.contains("vibecheck")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		embed.setAuthor("Vibecheck:");
+                    	embed.setImage("https://media1.tenor.com/images/48b96ea30d85cb419b22c66393c3b739/tenor.gif?itemid=15623737");
+                    	channel.sendMessageEmbeds(embed.build()).queue();
+                    	break;
+            		}
+            		else if(msg.contains("er thomas helt oppe i bageren?")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		channel.sendMessage("Thomas er helt oppe i bageren.").queue();
+                		break;
+            		}
+            		else if(msg.contains("har nitten kommet i sovsen?")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		channel.sendMessage("Nitten laver bechamelsovs.").queue();
+                		break;
+            		}
+            		else if(msg.contains("dio!")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		embed.setAuthor("DIO");
+                    	embed.setImage("https://gifimage.net/wp-content/uploads/2017/12/jojo-menacing-gif-12.gif");
+                    	embed.setDescription("ゴゴゴゴゴゴゴゴ");
+                    	channel.sendMessageEmbeds(embed.build()).queue();
+                    	break;
+            		}
+            		else if(msg.contains("dio")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		embed.setAuthor("Just Dio");
+                    	embed.setImage("https://thumbs.gfycat.com/AnchoredTornAzurewingedmagpie-small.gif");
+                    	channel.sendMessageEmbeds(embed.build()).queue();
+                    	break;
+            		}
+            		else if(msg.contains("thunder cross split attack")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		channel.sendMessageEmbeds(new EmbedBuilder().setAuthor("Thunder Cross Split Attack").setImage("https://i.imgur.com/zwioFkk.jpg").build()).queue();
+                		break;
+            		}
+            		else if(msg.contains("hayato")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		channel.sendMessageEmbeds(new EmbedBuilder().setImage("https://media1.tenor.com/images/2b0d3da94a3c2503c2295c8837cfa578/tenor.gif?itemid=14453363").build()).queue();
+                		break;
+            		}
+            		else if(msg.contains("oscars diller")) {
+                        message.addReaction("\uD83D\uDC4C").queue();
+                		embed.setImage("https://www.cdn.alt.dk/af3a7e756fff49e8babfbbfd2a7bcf91/9686403e0cc340fcb951cede6c3fd4f5.jpg");
+                    	channel.sendMessageEmbeds(embed.build()).queue();
+                    	break;
+            		}
             		break;
             	case prefix + "mør":
                     message.addReaction("\uD83D\uDC4C").queue();
@@ -171,139 +159,81 @@ public class Commands extends ListenerAdapter{
                 		GUI.button2pressed = true;
                 	}
                 	break;
-                
-            	case prefix + "profiler":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor(event.getAuthor().getName() + "'s profil");
-            		embed.setImage(event.getAuthor().getAvatarUrl());
-            		embed.setDescription(event.getAuthor().getId() + "L");
-            		channel.sendMessage(embed.build()).queue();
-            		break;
-                
-            	case prefix + "vibecheck":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("Vibecheck:");
-                	embed.setImage("https://media1.tenor.com/images/48b96ea30d85cb419b22c66393c3b739/tenor.gif?itemid=15623737");
-                	channel.sendMessage(embed.build()).queue();
-                	break;
-                
-            	case prefix + "er thomas helt oppe i bageren?":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		channel.sendMessage("Thomas er helt oppe i bageren.").queue();
-            		break;
-            
-            	case prefix + "har nitten kommet i sovsen?":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		channel.sendMessage("Nitten laver bechamelsovs.").queue();
-            		break;
-                
-            	case prefix + "dio!":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("DIO");
-                	embed.setImage("https://gifimage.net/wp-content/uploads/2017/12/jojo-menacing-gif-12.gif");
-                	embed.setDescription("ゴゴゴゴゴゴゴゴ");
-                	channel.sendMessage(embed.build()).queue();
-                	break;
-                
-            	case prefix + "dio":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("Just Dio");
-                	embed.setImage("https://thumbs.gfycat.com/AnchoredTornAzurewingedmagpie-small.gif");
-                	channel.sendMessage(embed.build()).queue();
-                	break;
-                
-            	case prefix + "thunder cross split attack":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		channel.sendMessage(new EmbedBuilder().setAuthor("Thunder Cross Split Attack").setImage("https://i.imgur.com/zwioFkk.jpg").build()).queue();
-            		break;
-            
-            	case prefix + "hayato":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		channel.sendMessage(new EmbedBuilder().setImage("https://media1.tenor.com/images/2b0d3da94a3c2503c2295c8837cfa578/tenor.gif?itemid=14453363").build()).queue();
-            		break;
-            
-            	case prefix + "oscars diller":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setImage("https://www.cdn.alt.dk/af3a7e756fff49e8babfbbfd2a7bcf91/9686403e0cc340fcb951cede6c3fd4f5.jpg");
-                	channel.sendMessage(embed.build()).queue();
-                	break;
-            
-
-            
-
             // få hjælp
-            	case prefix + "hjælp 1":
-            	case prefix + "hjælp":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("Hjælp");
-                	embed.setDescription("Her får du hjælp");
-                	embed.addField("-hjælp eller hjælp 1, 2, osv", "Få hjælp", false);
-                	embed.addField("-Er gaust mør?", "Få at vide om gaust er mør", false);
-                	embed.addField("-mør", "Mør", false);
-                	embed.addField("-farve <farve>","Få rolle ud fra farve (Blå, Grøn, Grå, Gul, Orange, Rød, Hvid, Lilla, Pink eller Mørkegrøn)", false);
-                	embed.addField("-farve reset", "Fjern alle farvede roller fra dig selv", false);
-                	embed.addField("-Hvad er bøw?", "Find ud af hvad bøw er.", false);
-                	embed.addField("-Credits", "Hvem har lavet botten ;)", false);
-                	channel.sendMessage(embed.build()).queue();
+            	case prefix + "help":
+            		if(content.length == 1 || content[1].contains("2")) {
+            			message.addReaction("\uD83D\uDC4C").queue();
+            			embed.setAuthor("Help");
+                		embed.setDescription("You'll get help here");
+                		embed.addField("-help or help 1, 2, etc", "Get help", false);
+                		embed.addField("-Er gaust mør?", "Fluff command", false);
+                		embed.addField("-mør", "Fluff command", false);
+                		embed.addField("-color <color>","get role based on input (blue, green, gray, yellow, Orange, red, white, purple, Pink or darkgreen)", false);
+                		embed.addField("-color reset", "Remove all colored roles from yourself", false);
+                		embed.addField("-Credits", "Who made this bot", false);
+                		channel.sendMessageEmbeds(embed.build()).queue();
                 	break;
-                
-            	case prefix + "hjælp 2":
+            		}
+            		else if(content[1].contains("2")) {
                     message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("Hjælp");
-                	embed.setDescription("Her får du mere hjælp");
-                	embed.addField("-mørcounter", "find ud af hvor mørret der er blevet", false);
-                	embed.addField("-gaust er mør", "giv alle besked at gaust er mør", false);
-                	embed.addField("rainbow", "få dit navn til at være sejt", false);
-                	channel.sendMessage(embed.build()).queue();
+            		embed.setAuthor("Help");
+                	embed.setDescription("You'll get even more help here");
+                	embed.addField("-mørcounter", "Fluff command", false);
+                	embed.addField("-gaust er mør", "Fluff command", false);
+                	embed.addField("rainbow", "TBD", false);
+                	embed.addField("-play", "queue a track", false);
+                	embed.addField("-queue", "show a list of tracks in queue", false);
+                	channel.sendMessageEmbeds(embed.build()).queue();
                 	break;
-                
-            	case prefix + "hvad er bøw?":
-                    message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setAuthor("Hvad er Bøw?");
-                	embed.setDescription("Dette er en discord server der først blev brugt meget da de fleste der er mod nu gik på HTX");
-                	embed.addField("Hvorfor er vi på 3. server?", "Den første server endte alle med admin og ødelagde serveren, anden server blev efterladt af ejeren", false);
-                	channel.sendMessage(embed.build()).queue();
-                	break;
-                
+            		}
             	case prefix + "credits":
                     message.addReaction("\uD83D\uDC4C").queue();
             		if (msg.equalsIgnoreCase(prefix + "credits")) 
             		{
-            			channel.sendMessage("@Mast3r_waf1z#6969 har lavet Mør Bot, inspireret af at @Snaust#2517 er mør").queue();
+            			channel.sendMessage("created by @Mast3r_waf1z#6969, name inspired by @Snaust#2517").queue();
             		}
             		break;
                 //sinister intentions
             	case prefix + "jens": 
                     message.addReaction("\uD83D\uDC4C").queue();
+                	if(jens) 
                 	{
-                		if(reacter) 
-                		{
-                			reacter = false;
-                			channel.sendMessage("Jens terminated").queue();
-                		}
-                		else if(!reacter) 
-                		{
-                			reacter = true;
-                			channel.sendMessage("Jens initiated").queue();
-                		}
+                		jens = false;
+                		channel.sendMessage("Jens terminated").queue();
+                	}
+                	else if(!jens) 
+                	{
+                		jens = true;
+                		channel.sendMessage("Jens initiated").queue();
                 	}
                 	break;
-            	case prefix + "lort":
+            	case prefix + "rasmus":
+            		message.addReaction("\uD83D\uDC4C").queue();
+            		if(rasmus)
+            		{
+            			rasmus = false;
+      					channel.sendMessage("Rasmus terminated").queue();
+            		}
+            		else if(!rasmus) 
+            		{
+            			rasmus = true;
+            			channel.sendMessage("Rasmus initiated").queue();
+            		}
+            		break;
+            	case prefix + "poop":
                     message.addReaction("\uD83D\uDC4C").queue();
             		JSONObject guildData = (JSONObject) log.readData("data2.json").get(guild.getId());
             		String currentLort = guildData.get("currentLort").toString();
-            		channel.sendMessage(guild.retrieveMemberById(currentLort).complete().getEffectiveName() + " har lorten").queue();
+            		channel.sendMessage(guild.retrieveMemberById(currentLort).complete().getEffectiveName() + " has the poop").queue();
             		break;
             	case prefix + "leaderboard":
                     message.addReaction("\uD83D\uDC4C").queue();
-            		embed.setTitle("Lort Leaderboard");
+            		embed.setTitle("Poop Leaderboard");
             		embed.setThumbnail("https://cdn.discordapp.com/attachments/692410386657574955/809730484640284682/lort.png");
             		JSONObject File = log.readData("leaderboard2.json");
             		LB = (JSONObject) File.get(guild.getId());
             		//LB = log.readData("leaderboard2.json");
             		if(LB.size() > 0) {
-                		System.out.println("Leaderboard size: "+LB.size());
-                		System.out.println("first entry: "+LB.entrySet().toArray()[0].toString().substring(0, 18));
                 		Object[] entrySet = LB.entrySet().toArray();
                 		
                 		//sort
@@ -318,10 +248,10 @@ public class Commands extends ListenerAdapter{
                 		//end sort
                 		
             			for(int i = result.size(); i > 0 ; i--) {
-            				String id = result.keySet().toArray()[i - 1].toString().substring(0, 18);
-            				embed.addField(guild.retrieveMemberById(id).complete().getEffectiveName(),LB.get(id).toString() + " Lort", false);
+            				String id = result.keySet().toArray()[i - 1].toString();
+            				embed.addField(guild.retrieveMemberById(id).complete().getEffectiveName(),LB.get(id).toString() + " Poop", false);
             			}
-            			channel.sendMessage(embed.build()).queue();
+            			channel.sendMessageEmbeds(embed.build()).queue();
             		}
             		else {
             			channel.sendMessage("leaderboard empty :(").queue();
@@ -329,12 +259,15 @@ public class Commands extends ListenerAdapter{
             		break;
             }
             //214752462769356802 mig 310153696044515349 moham(m)ad
-            if(reacter && guild.getId().equals("761730703762128992") && member.getId().equals("310153696044515349")) 
+            if(jens && (guild.getId().equals("761730703762128992") || guild.getId().equals("692410386657574952")) && member.getId().equals("310153696044515349")) 
             {
             	message.addReaction("minn:769359037149478932").queue();
             }
+            if(rasmus && guild.getId().equals("761730703762128992") && member.getId().equals("203928945207279616"))
+            {
+            	message.addReaction("minn:812017850281623604").queue();
+            }
             double rand = Math.random() * 100;
-            System.out.println(Math.exp(msg.length()/175));
             if(rand > 99 - (Math.exp(msg.length()/175))) {
             	message.addReaction("\uD83D\uDCA9").queue();
             	JSONObject data = new JSONObject();
@@ -370,21 +303,16 @@ public class Commands extends ListenerAdapter{
             	{
             		case prefix + "gaust er mør":
             	        message.addReaction("\uD83D\uDC4C").queue();
-            			GUI.button1pressed = true;
+            			Main.setActivity("Gaust er mør");
             			break;
             	
            			case prefix + "nitten kommer i sovsen":
            		        message.addReaction("\uD83D\uDC4C").queue();
-       					nitten = true;
+           				Main.setActivity("Nitten kommer i sovsen");
             			break;
             		case prefix + "mørcounter":
             	        message.addReaction("\uD83D\uDC4C").queue();
-            			GUI.button2pressed = true;
-            			break;
-            	
-            		case prefix + "track":
-            	        message.addReaction("\uD83D\uDC4C").queue();
-            			trackTracker = true;
+            			Main.setActivity(mør + "x mør");
             			break;
             			
             		case prefix + "rainbow start":
@@ -410,66 +338,77 @@ public class Commands extends ListenerAdapter{
             	}
             }
 
-            // to be split commands
-            if (splitmsg[0].equalsIgnoreCase(prefix + "split")) 
-            {
-                message.addReaction("\uD83D\uDC4C").queue();
-            	embed.setAuthor("split");
-
-            	for (int i = 1; i < splitmsg.length; i++) 
-            	{
-            		embed.addField(" ", splitmsg[i], false);
-            	}
-            	embed.setDescription("total: " + String.valueOf(splitmsg.length - 1));
-            	channel.sendMessage(embed.build()).queue();
-            }
-
-            if (splitmsg[0].equalsIgnoreCase(prefix + "link")) 
-            {
-                message.addReaction("\uD83D\uDC4C").queue();
-            	char[] youtube = { 'y', 'o', 'u', 't', 'u' };
-            	if (splitmsg[1].length() > 5) 
-            	{
-            		if (findSpecificSubstring(youtube, splitmsg[1])) 
-            		{
-            			channel.sendMessage("youtube").queue();
-            		}
-            	}
-            	char[] soundcloud = { 'o', 'u', 'n', 'd' };
-            	if (splitmsg[1].length() > 5) 
-            	{
-            		if (findSpecificSubstring(soundcloud, splitmsg[1])) 
-            		{
-            			channel.sendMessage("soundcloud").queue();
-            		}
-            	}
-            }
-
             // Musicbot
-            if (splitmsg[0].equalsIgnoreCase(prefix + "play") || splitmsg[0].equalsIgnoreCase(prefix + "p")) 
-            {
+            switch(content[0].toLowerCase()) {
+            case prefix + "play":
+            case prefix + "p":
                 message.addReaction("\uD83D\uDC4C").queue();
-            	if (splitmsg.length == 2) 
-            	{
-            		musicBot.loadAndPlay(event.getTextChannel(), event.getMember().getVoiceState().getChannel(), splitmsg[1]);
-            	} 
-            	else 
-            	{
-            		channel.sendMessage("Link mangler");
+            	if (content.length == 2) {
+            		musicBot.loadAndPlay(event.getTextChannel(), event.getMember().getVoiceState().getChannel(), content[1]);
             	}
-            }
-            else if (splitmsg[0].equalsIgnoreCase(prefix + "skip")) 
-            {
+            	else {
+            		channel.sendMessage("Missing Youtube link").queue();
+            	}
+            	break;
+            case prefix + "skip":
                 message.addReaction("\uD83D\uDC4C").queue();
-            	musicBot.skipTrack(event.getTextChannel());
-            }
-            if (msg.equalsIgnoreCase(prefix + "queue")) 
-            {
-            	channel.sendMessage(musicBot.getQueue().build()).queue();
-            }
-            if (msg.equalsIgnoreCase(prefix + "disconnect")) 
-            {
-            	musicBot.disconnect(guild);
+            	try {
+            		musicBot.skipTrack(event.getTextChannel());
+            	} catch(Exception e){
+            		channel.sendMessage("There is nothing to skip").queue();
+            	}
+            	break;
+            case prefix + "queue":
+            case prefix + "q":
+            	try {
+            		if(content.length>1) {
+            			channel.sendMessageEmbeds(musicBot.getQueue(guild.getTextChannelById(channel.getId()), Integer.parseInt(content[1])).build()).queue();
+            		}
+            		else if(content.length==1) {
+            			channel.sendMessageEmbeds(musicBot.getQueue(guild.getTextChannelById(channel.getId()), 0).build()).queue();
+            		}
+            	}catch(IllegalStateException e) {
+            		e.printStackTrace();
+            		channel.sendMessage("EXCEPTION! command failed").queue();
+            	}
+            	break;
+            case prefix + "disconnect":
+            		musicBot.disconnect(guild);
+            	break;
+            case prefix + "nowplaying":
+            case prefix + "np":
+                	message.addReaction("\uD83D\uDC4C").queue();
+            		try {
+            		musicBot.nowPlaying(channel);
+            		} catch(Exception e) {
+            			channel.sendMessage("There is nothing playing").queue();
+            		}
+            	break;
+            case prefix + "clear":
+            	musicBot.clear(channel);
+            	break;
+            case prefix + "repeat":
+                message.addReaction("\uD83D\uDC4C").queue();
+            	musicBot.repeat(channel);
+            	break;
+			case prefix + "python":
+				if(!message.getContentRaw().contains("while")) {
+					String code = message.getContentRaw().substring(8);
+					System.out.println(code);
+					if(code.contains("`")) {
+						code = code.substring(3, code.length()-3);
+					}
+					if(code.contains("python")) {
+						code = code.substring(7);
+					}
+					else if(code.contains("py")) {
+						code = code.substring(3);
+					}
+					
+					System.out.println("finished running");
+					channel.sendMessage("```python\n"+code+"\n\nOutput:\n"+pyExecuter(code)+"```").queue();
+				}
+				break;
             }
         }
     }
@@ -480,51 +419,6 @@ public class Commands extends ListenerAdapter{
         return roles.stream().filter(role -> role.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public int findStringSubstrings(String string, char c) 
-    {
-        int substrings = 0;
-        for (int i = 0; i < string.length(); i++) 
-        {
-            if (string.charAt(i) == c) 
-            {
-                substrings++;
-            }
-        }
-        return substrings;
-    }
-
-    public boolean findSpecificSubstring(char[] c, String string) 
-    {
-        boolean[] Found = new boolean[c.length];
-        boolean result = true;
-        int startLocation = 0;
-        for (int i = 0; i < c.length; i++) 
-        {
-            Found[i] = false;
-        }
-        for (int i = 0; i < string.length(); i++) 
-        {
-            if (string.charAt(i) == c[0] && startLocation == 0) 
-            {
-                startLocation = i;
-            }
-        }
-        for (int i = 0; i < c.length; i++) 
-        {
-            if (string.charAt(i + startLocation) == c[i] && Found[i] == false) 
-            {
-                Found[i] = true;
-            }
-        }
-        for (int i = 0; i < c.length; i++) 
-        {
-            if (!Found[i]) 
-            {
-                result = false;
-            }
-        }
-        return result;
-    }
     private static User getMember(String id) throws LoginException{
         JDA jda = JDABuilder.createDefault(log.readData("data").get("token").toString()).build();
         return jda.getUserById(id);
@@ -534,4 +428,21 @@ public class Commands extends ListenerAdapter{
     	return jda.getGuildById(id);
         
     }
+    private void resetcolors (Member member, Guild guild) {
+    	for(int i = 0; i < color.length; i++) {
+    		if(findRole(member, color[i]) != null) {
+    			guild.removeRoleFromMember(member, guild.getRolesByName(color[i], true).get(0)).queue();
+    		}
+    	}
+    }
+	public String pyExecuter(String code) {
+		PythonInterpreter pyInterp;
+		pyInterp = new PythonInterpreter();
+		StringWriter output = new StringWriter();
+		pyInterp.setOut(output);
+		pyInterp.exec(code);
+		System.out.println(output.toString());
+		pyInterp.close();
+		return output.toString();
+	}
 }

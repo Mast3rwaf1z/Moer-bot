@@ -2,6 +2,8 @@ package bot1;
 
 import javax.swing.*;
 
+import net.dv8tion.jda.api.OnlineStatus;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -56,12 +58,13 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED && list[0].equals(e.getItem())) {
+                	Main.setStatus(OnlineStatus.ONLINE);
                 }
-                if (e.getStateChange() == ItemEvent.SELECTED && list[1].equals(e.getItem())) {
-                    idle = true;
+                else if (e.getStateChange() == ItemEvent.SELECTED && list[1].equals(e.getItem())) {
+                    Main.setStatus(OnlineStatus.IDLE);
                 }
-                if (e.getStateChange() == ItemEvent.SELECTED && list[2].equals(e.getItem())) {
-                    DnD = true;
+                else if (e.getStateChange() == ItemEvent.SELECTED && list[2].equals(e.getItem())) {
+                	Main.setStatus(OnlineStatus.DO_NOT_DISTURB);
                 }
             }
         });
@@ -70,14 +73,12 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == button) {
-            button1pressed = true;
-            System.out.println("Er gaust mør?");
+        	Main.setActivity("Gaust er mør");
         }
         if (e.getSource() == button2) {
-            button2pressed = true;
+        	Main.setActivity(Commands.mør + "x mør");
         }
         if (e.getSource() == button3) {
-            button3pressed = true;
         }
     }
 

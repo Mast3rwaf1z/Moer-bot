@@ -1,5 +1,8 @@
 package bot1.MusicPlayer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -14,6 +17,9 @@ import bot1.Main;
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
+    private AudioTrack[] temp = {};
+    public List<AudioTrack> queueList = new ArrayList<AudioTrack>(Arrays.asList(temp));
+    public boolean repeat = false;
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
@@ -22,24 +28,39 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void queue(AudioTrack track) {
         if (!player.startTrack(track, true)) {
-            System.out.println("A track is already playing");
             queue.offer(track);
+            queueList.add(track);
+        }
+        else if(player.isPaused()) {
+        	player.setPaused(false);
         }
     }
-
-    public void nextTrack() {
-        player.startTrack(queue.poll(), false);
+    
+    public AudioTrack nextTrack() {
+    	AudioTrack track = queue.poll();
+    	queueList.remove(0);
+        if(player.startTrack(track, false)) {
+        	Commands.trackTracker = true;
+        	Main.currentTrack = track.getInfo().title;
+        	if(player.isPaused()) {
+        		player.setPaused(false);
+        	}
+        }
+        return track;
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
-            nextTrack();
-            Main.currentTrack = track.getInfo().title;
-            Commands.trackTracker = true;
-        }
-        if (queue.isEmpty()) {
-            player.setPaused(true);
+    	if (queue.isEmpty()) {
+    		player.setPaused(true);
+    	}
+    	else if (endReason.mayStartNext) {
+    		if(repeat) {
+    			player.playTrack(track);
+    		}
+    		else {
+    			nextTrack();
+    		}
         }
     }
 }

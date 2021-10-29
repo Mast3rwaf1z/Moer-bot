@@ -2,6 +2,7 @@ package bot1;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
 
@@ -13,22 +14,29 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
 import org.json.simple.*;
+import org.python.util.PythonInterpreter;
 
 public class Main {
     public static boolean ActivityMør = false;
     public static String currentTrack;
     public static int rainbowCounter = 0;
     public static int currentRole = 0;
-
+    static JDA jda;
     @SuppressWarnings("unchecked")
 	public static void main(String[] args) throws LoginException, InterruptedException, IOException, InvocationTargetException {
     	JSONObject admin = (JSONObject) log.readData("data2.json").get("admin");
-    	System.out.println(admin);
         Commands.mør = Long.parseLong(admin.get("mør").toString());
         GUI newWindow = new GUI("Mør Bot");
-        final JDA jda = JDABuilder.createDefault(admin.get("token").toString())
-                .addEventListeners(new Commands()).setActivity(Activity.playing("-hjælp"))
+        jda = JDABuilder.createDefault(admin.get("token").toString())
+                .addEventListeners(new Commands()).setActivity(Activity.playing("-help"))
                 .setStatus(OnlineStatus.ONLINE).build();
+        Properties props = new Properties();
+        props.put("python.console.encoding", "UTF-8");
+        props.put("python.import.site", "false");
+        
+        Properties preProps = System.getProperties();
+        PythonInterpreter.initialize(preProps, props, new String[0]);
+        
         
         //MessageChannel channel = jda.getGuildById(692410386657574952L).getTextChannelById(798128372403929088L);
         //channel.addReactionById(798128372403929088L, "U+1F602").queue();
@@ -36,49 +44,13 @@ public class Main {
         //channel.sendMessage(message).queue();
         
         
-        while (true) {
-            if (GUI.button1pressed) {
-                jda.getPresence().setActivity(Activity.playing("-hjælp | " + newWindow.activity));
-                System.out.println(newWindow.activity);
-                ActivityMør = false;
-            }
-            if (Commands.nitten) {
-                jda.getPresence().setActivity(Activity.playing("-hjælp | " + "Nitten kommer i sovsen"));
-            }
-            if (GUI.button2pressed) {
-                jda.getPresence().setActivity(Activity.playing("-hjælp | " + Commands.mør + " x Mør"));
-                ActivityMør = true;
-
-            }
-            if (GUI.button3pressed) {
-            	admin.put("mør", 0);
-            	log.writeData("admin", admin, "data2.json");
-                //log.writeFile(String.valueOf(0));
-                Commands.mør = 0;
-                GUI.button2pressed = true;
-            }
-            if (GUI.online) {
-                jda.getPresence().setStatus(OnlineStatus.ONLINE);
-                System.out.println("online");
-            }
-            if (GUI.idle) {
-                jda.getPresence().setStatus(OnlineStatus.IDLE);
-                System.out.println("idle");
-            }
-            if (GUI.DnD) {
-                jda.getPresence().setStatus(OnlineStatus.DO_NOT_DISTURB);
-                System.out.println("DnD");
-            }
-            if (Commands.trackTracker) {
-                jda.getPresence().setActivity(Activity.playing("-hjælp | " + currentTrack));
-            }
+        /*while (true) {
             if(Commands.rainbow) {
                 Guild rainbowGuild = jda.getGuildById(Commands.rainbowGuild);
                 Member rainbowMember = rainbowGuild.getMemberById(Commands.rainbowMember);
-            	System.out.println(rainbowCounter);
+            	//System.out.println(rainbowCounter);
                 if(rainbowCounter == 250) {
-                	 String[] farver = {"blå", "grøn", "grå", "gul", "orange", "rød", "hvid", "lilla", "pink", "mørkegrøn"};
-                	 System.out.println(farver[currentRole]);
+                	 String[] farver = {"blue", "green", "gray", "yellow", "orange", "red", "white", "purple", "pink", "darkgreen"};
                 	 currentRole++;
                 	 if(currentRole >= farver.length) {
                 		 currentRole = 0;
@@ -106,6 +78,12 @@ public class Main {
             Commands.nitten = false;
             Commands.trackTracker = false;
             Thread.sleep(10);
-        }
+        }*/
+    }
+    public static void setActivity(String activity) {
+    	jda.getPresence().setActivity(Activity.playing("-help | " + activity));
+    }
+    public static void setStatus(OnlineStatus status) {
+    	jda.getPresence().setStatus(status);
     }
 }
