@@ -24,8 +24,8 @@ public class Main {
     @SuppressWarnings("unchecked")
 	public static void main(String[] args) throws LoginException, InterruptedException, IOException, InvocationTargetException {
     	try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://193.176.87.172:41896/morbot,", "mast3r", "dt1ikkuy");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://193.176.87.172:41896", "mast3r", "dt1ikkuy");
 			Statement stmt = con.createStatement();
 			stmt.execute("use morbot;");
 			stmt.execute("insert into userdata values('214752462769356802', 57);");
