@@ -23,7 +23,7 @@ public class Main {
     static JDA jda;
     @SuppressWarnings("unchecked")
 	public static void main(String[] args) throws LoginException, InterruptedException, IOException, InvocationTargetException {
-    	try {
+    	/*try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://193.176.87.172:41896", "mast3r", "dt1ikkuy");
 			Statement stmt = con.createStatement();
@@ -32,7 +32,7 @@ public class Main {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		}
+		}*/
     	exec();
     }
     
