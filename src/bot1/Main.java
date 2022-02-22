@@ -25,9 +25,9 @@ public class Main {
 	public static void main(String[] args) throws LoginException, InterruptedException, IOException, InvocationTargetException {
     	try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mørbot,", "mast3r", "1234");
+			Connection con = DriverManager.getConnection("jdbc:mysql://193.176.87.172:41896/morbot,", "mast3r", "dt1ikkuy");
 			Statement stmt = con.createStatement();
-			stmt.execute("use mørbot;");
+			stmt.execute("use morbot;");
 			stmt.execute("insert into userdata values('214752462769356802', 57);");
 		} catch (Exception e) {
 			// TODO: handle exception
