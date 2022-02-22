@@ -33,6 +33,7 @@ public class Main {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+    	exec();
     }
     
     public static void setActivity(String activity) {
