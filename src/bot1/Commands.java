@@ -38,19 +38,20 @@ public class Commands extends ListenerAdapter{
     public static boolean rainbow = false;
     public static boolean jens = false;
     public static boolean rasmus = false;
-    private static final String prefix = "-";
+    public static final char prefix = '&';
     public static long rainbowGuild = 761730703762128992L;
     public static long rainbowMember = 214752462769356802L;
     static JSONObject admin = (JSONObject) log.readData("data2.json").get("admin");
     final private String[] color = {"blue", "green", "gray", "yellow", "orange", "red", "white", "purple", "pink", "darkgreen"};
     JSONObject data = log.readData("data2.json");
+    HashMap<String, Jailthread> jailed = new HashMap<String, Jailthread>();
     MusicBot musicBot = new MusicBot();
 	@SuppressWarnings("unchecked")
 	@Override
     public void onMessageReceived(MessageReceivedEvent event) {
         Message message = event.getMessage();
         TextChannel channel = event.getTextChannel();
-        String msg = message.getContentDisplay();
+        String msg = message.getContentRaw();
         String[] content = msg.split(" ");
         Member member = event.getMember();
         Guild guild = event.getGuild();
@@ -147,7 +148,7 @@ public class Commands extends ListenerAdapter{
                 	//try 
                 	//{
                 		//log.writeFile(String.valueOf(Commands.mør));
-                	admin.put("mør", mør);
+                	admin.put("moer", mør);
                 		log.writeData("admin", admin, "data2.json");
                 	//} 
                 	/*catch (IOException e) 
@@ -165,12 +166,12 @@ public class Commands extends ListenerAdapter{
             			message.addReaction("\uD83D\uDC4C").queue();
             			embed.setAuthor("Help");
                 		embed.setDescription("You'll get help here");
-                		embed.addField("-help or help 1, 2, etc", "Get help", false);
-                		embed.addField("-Er gaust mør?", "Fluff command", false);
-                		embed.addField("-mør", "Fluff command", false);
-                		embed.addField("-color <color>","get role based on input (blue, green, gray, yellow, Orange, red, white, purple, Pink or darkgreen)", false);
-                		embed.addField("-color reset", "Remove all colored roles from yourself", false);
-                		embed.addField("-Credits", "Who made this bot", false);
+                		embed.addField(prefix + "help or help 1, 2, etc", "Get help", false);
+                		embed.addField(prefix + "Er gaust mør?", "Fluff command", false);
+                		embed.addField(prefix + "mør", "Fluff command", false);
+                		embed.addField(prefix + "color <color>","get role based on input (blue, green, gray, yellow, Orange, red, white, purple, Pink or darkgreen)", false);
+                		embed.addField(prefix + "color reset", "Remove all colored roles from yourself", false);
+                		embed.addField(prefix + "Credits", "Who made this bot", false);
                 		channel.sendMessageEmbeds(embed.build()).queue();
                 	break;
             		}
@@ -178,11 +179,11 @@ public class Commands extends ListenerAdapter{
                     message.addReaction("\uD83D\uDC4C").queue();
             		embed.setAuthor("Help");
                 	embed.setDescription("You'll get even more help here");
-                	embed.addField("-mørcounter", "Fluff command", false);
-                	embed.addField("-gaust er mør", "Fluff command", false);
-                	embed.addField("rainbow", "TBD", false);
-                	embed.addField("-play", "queue a track", false);
-                	embed.addField("-queue", "show a list of tracks in queue", false);
+                	embed.addField(prefix+"mørcounter", "Fluff command", false);
+                	embed.addField(prefix+"gaust er mør", "Fluff command", false);
+                	embed.addField(prefix+"rainbow", "TBD", false);
+                	embed.addField(prefix+"play", "queue a track", false);
+                	embed.addField(prefix+"queue", "show a list of tracks in queue", false);
                 	channel.sendMessageEmbeds(embed.build()).queue();
                 	break;
             		}
@@ -249,6 +250,7 @@ public class Commands extends ListenerAdapter{
                 		
             			for(int i = result.size(); i > 0 ; i--) {
             				String id = result.keySet().toArray()[i - 1].toString();
+            				System.out.println(id);
             				embed.addField(guild.retrieveMemberById(id).complete().getEffectiveName(),LB.get(id).toString() + " Poop", false);
             			}
             			channel.sendMessageEmbeds(embed.build()).queue();
@@ -407,6 +409,34 @@ public class Commands extends ListenerAdapter{
 					
 					System.out.println("finished running");
 					channel.sendMessage("```python\n"+code+"\n\nOutput:\n"+pyExecuter(code)+"```").queue();
+				}
+				break;
+			case prefix + "jail":
+				if(content[1] == "--t" || content[1] == "-time") {
+					message.addReaction("\uD83D\uDC4C").queue();
+					long current = System.currentTimeMillis();
+					long start = jailed.get(content[1].substring(3, 21)).starttime;
+					String seconds = String.valueOf(jailed.get(content[1].substring(3, 21)).jailtime - ((current - start)/1000));
+					String minutes = String.valueOf(jailed.get(content[1].substring(3, 21)).jailtime/60 - (((current - start)/1000)/60));
+					String hours = String.valueOf(jailed.get(content[1].substring(3, 21)).jailtime/3600 - ((((current - start)/1000)/60)/60));
+					String days = String.valueOf(jailed.get(content[1].substring(3, 21)).jailtime/86400 - (((((current - start)/1000)/60)/60)/24));
+					String jailmsg = guild.retrieveMemberById(content[1].substring(3, 21)).complete().getEffectiveName() + " has " + days + " days or " + hours + " hours or " + minutes + " minutes or " + seconds + " seconds left ";
+					channel.sendMessage(jailmsg).queue();
+				}
+				else if(content.length == 3 && member.isOwner()) {
+					message.addReaction("\uD83D\uDC4C").queue();
+					String currentRole = "";
+					System.out.println(content[1]);
+					if(findRole(event.getGuild().retrieveMemberById(content[1].substring(3, 21)).complete(), "Stor skade") != null) {
+						currentRole = "851167407895478283";
+					}
+					else if(findRole(event.getGuild().retrieveMemberById(content[1].substring(3, 21)).complete(), "BRAINDEAD") != null) {
+						currentRole = "851166983269384252";
+					}
+					else if(findRole(event.getGuild().retrieveMemberById(content[1].substring(3, 21)).complete(), "Guest") != null){
+						currentRole = "884895202366595102";
+					}
+					jailed.put(content[1].substring(3, 21), new Jailthread(event.getGuild().retrieveMemberById(content[1].substring(3, 21)).complete(), event.getGuild().getRoleById(currentRole), Integer.parseInt(content[2]), event));
 				}
 				break;
             }

@@ -16,7 +16,7 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
      */
     private static final long serialVersionUID = 1L;
 
-    public final String activity = "Gaust er mør";
+    public final String activity = "Gaust er mï¿½r";
     static public boolean button1pressed = false;
     static public boolean button2pressed = false;
     static public boolean button3pressed = false;
@@ -37,9 +37,9 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
         this.setResizable(false);
         this.setVisible(true);
         this.setIconImage(new ImageIcon("BotImage").getImage());
-        button = new JButton("Er gaust mør?");
-        button2 = new JButton("Mørcounter");
-        button3 = new JButton("Reset Mør");
+        button = new JButton("Er gaust mï¿½r?");
+        button2 = new JButton("Mï¿½rcounter");
+        button3 = new JButton("Reset Mï¿½r");
         JTextArea titlepanel = new JTextArea(title + " Kontrolpanel");
         this.add(titlepanel);
         line2.add(button);
@@ -73,10 +73,10 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == button) {
-        	Main.setActivity("Gaust er mør");
+        	Main.setActivity("Gaust er mï¿½r");
         }
         if (e.getSource() == button2) {
-        	Main.setActivity(Commands.mør + "x mør");
+        	Main.setActivity(Commands.mÃ¸r + "x mï¿½r");
         }
         if (e.getSource() == button3) {
         }
@@ -159,7 +159,7 @@ public class GUI extends JFrame implements WindowListener, ActionListener {
                 }
             });
             popup.add(defaultItem);
-            trayIcon = new TrayIcon(image, "Mør Bot", popup);
+            trayIcon = new TrayIcon(image, "Mï¿½r Bot", popup);
             trayIcon.setImageAutoSize(true);
         }
         addWindowStateListener(new WindowStateListener() {
