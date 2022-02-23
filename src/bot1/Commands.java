@@ -1,5 +1,9 @@
 package bot1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -247,13 +251,31 @@ public class Commands extends ListenerAdapter{
                 		Map<String, Integer> result = converted.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
                 		System.out.println(result);
                 		//end sort
-                		
-            			for(int i = result.size(); i > 0 ; i--) {
-            				String id = result.keySet().toArray()[i - 1].toString();
-            				System.out.println(id);
-            				embed.addField(guild.retrieveMemberById(id).complete().getEffectiveName(),LB.get(id).toString() + " Poop", false);
-            			}
-            			channel.sendMessageEmbeds(embed.build()).queue();
+
+                		if(content.length > 1 && content[1].equalsIgnoreCase("plot")) { //print as a plot
+                			ProcessBuilder processBuilder  = new ProcessBuilder("python", "plotter.py", guild.getId());
+                			processBuilder.redirectErrorStream(true);
+                			try {
+								Process process = processBuilder.start();
+								process.waitFor();
+								File file = new File("tmp.png");
+								channel.sendFile(file).queue();
+								
+								
+							} catch (IOException | InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+                			System.out.println("leaderboard table");
+                		}
+                		else { //print in an embed
+                			for(int i = result.size(); i > 0 ; i--) { 
+                				String id = result.keySet().toArray()[i - 1].toString();
+                				System.out.println(id);
+                				embed.addField(guild.retrieveMemberById(id).complete().getEffectiveName(),LB.get(id).toString() + " Poop", false);
+                			}
+                			channel.sendMessageEmbeds(embed.build()).queue();
+                		}
             		}
             		else {
             			channel.sendMessage("leaderboard empty :(").queue();
@@ -393,6 +415,7 @@ public class Commands extends ListenerAdapter{
                 message.addReaction("\uD83D\uDC4C").queue();
             	musicBot.repeat(channel);
             	break;
+            case prefix + "py":
 			case prefix + "python":
 				if(!message.getContentRaw().contains("while")) {
 					String code = message.getContentRaw().substring(8);
@@ -407,8 +430,8 @@ public class Commands extends ListenerAdapter{
 						code = code.substring(3);
 					}
 					
-					System.out.println("finished running");
 					channel.sendMessage("```python\n"+code+"\n\nOutput:\n"+pyExecuter(code)+"```").queue();
+					System.out.println("finished running");
 				}
 				break;
 			case prefix + "jail":
