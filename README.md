@@ -18,4 +18,4 @@ If you wish to run the bot yourself, please create your own data.json file.
     {
       "currentLort": 0
     }
-}```
+}
